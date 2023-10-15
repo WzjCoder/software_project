@@ -1,18 +1,40 @@
 import 'package:flutter/material.dart';
 import 'package:test1/start.dart';
+import 'package:flutter/cupertino.dart';
 
-void main() => runApp(Sign());
+// class CustomPageRoute<T> extends PageRouteBuilder<T> 
+// {
+//   final Widget child;
+
+//   CustomPageRoute({required this.child})
+//       : super(
+//           pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
+//             return child;
+//           },
+//           transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
+//             return FadeTransition(
+//               opacity: animation,
+//               child: child,
+//             );
+//           },
+//         );
+// }
+
+void main() => runApp(const Sign());
 
 class Sign extends StatelessWidget
 {
+  const Sign({super.key});
+
   @override
   Widget build(BuildContext context)
   {
     return MaterialApp(
-      home: HomePage(),
+      home: const HomePage(),
       routes: 
       {
-        '/start':(context) => StartPage(),
+        '/start':(context) => const StartPage(),
+        '/main':(context) => const HomePage(),
       },
     );
   }
@@ -20,12 +42,16 @@ class Sign extends StatelessWidget
 
 class HomePage extends StatelessWidget
 {
+  const HomePage({super.key});
+
+  @override
   Widget build(BuildContext context)
   {
     return Scaffold
     (
       appBar: AppBar
       (
+        automaticallyImplyLeading: false,
         title: const Text('Sign Demo'),
       ),
       body: Center
@@ -34,7 +60,7 @@ class HomePage extends StatelessWidget
         (
           onPressed: ()
           {
-            Navigator.of(context).pushNamed('/start');
+            Navigator.of(context).push(CupertinoPageRoute(builder:(context) => const StartPage()));
           },
           child: const Text('开始使用'),
         ),
