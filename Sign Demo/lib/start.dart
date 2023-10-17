@@ -1,6 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:test1/main.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:test1/stu_login.dart';
 
 class StartPage extends StatelessWidget 
 {
@@ -27,7 +27,7 @@ class StartPage extends StatelessWidget
             (
               onPressed: ()
               {
-                // goto i'm stu
+                Navigator.of(context).push(CupertinoPageRoute(builder:(context) => Stu_login()));
               },
               child: const Text('我是学生'),
             ),

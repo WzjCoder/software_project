@@ -2,24 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:test1/start.dart';
 import 'package:flutter/cupertino.dart';
 
-// class CustomPageRoute<T> extends PageRouteBuilder<T> 
-// {
-//   final Widget child;
-
-//   CustomPageRoute({required this.child})
-//       : super(
-//           pageBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation) {
-//             return child;
-//           },
-//           transitionsBuilder: (BuildContext context, Animation<double> animation, Animation<double> secondaryAnimation, Widget child) {
-//             return FadeTransition(
-//               opacity: animation,
-//               child: child,
-//             );
-//           },
-//         );
-// }
-
 void main() => runApp(const Sign());
 
 class Sign extends StatelessWidget
