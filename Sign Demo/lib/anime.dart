@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TestAnimationPage extends StatefulWidget {
+  const TestAnimationPage({super.key});
+
   @override
   _TestAnimationPageState createState() => _TestAnimationPageState();
 }
@@ -23,21 +25,21 @@ class _TestAnimationPageState extends State<TestAnimationPage>
     _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.0, 0.5, curve: Curves.easeIn),
+        curve: const Interval(0.0, 0.5, curve: Curves.easeIn),
       ),
     );
 
     _sizeAnimation = Tween<double>(begin: 0.0, end: 100.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.5, 0.75, curve: Curves.elasticOut),
+        curve: const Interval(0.5, 0.75, curve: Curves.elasticOut),
       ),
     );
 
     _rotationAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
       CurvedAnimation(
         parent: _controller,
-        curve: Interval(0.75, 1.0, curve: Curves.easeInOut),
+        curve: const Interval(0.75, 1.0, curve: Curves.easeInOut),
       ),
     );
 
@@ -60,7 +62,7 @@ class _TestAnimationPageState extends State<TestAnimationPage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Animation Test'),
+        title: const Text('Animation Test'),
       ),
       body: Center(
         child: Column(
@@ -71,10 +73,10 @@ class _TestAnimationPageState extends State<TestAnimationPage>
               sizeAnimation: _sizeAnimation,
               rotationAnimation: _rotationAnimation,
             ),
-            SizedBox(height: 30),
+            const SizedBox(height: 30),
             ElevatedButton(
               onPressed: _startAnimation,
-              child: Text('开始动画'),
+              child: const Text('开始动画'),
             ),
           ],
         ),
@@ -88,7 +90,7 @@ class CustomAnimatedWidget extends StatelessWidget {
   final Animation<double> sizeAnimation;
   final Animation<double> rotationAnimation;
 
-  CustomAnimatedWidget({
+  const CustomAnimatedWidget({super.key, 
     required this.opacityAnimation,
     required this.sizeAnimation,
     required this.rotationAnimation,
@@ -101,16 +103,16 @@ class CustomAnimatedWidget extends StatelessWidget {
       child: RotationTransition(
         turns: rotationAnimation,
         child: AnimatedContainer(
-          duration: Duration(seconds: 3),
+          duration: const Duration(seconds: 3),
           width: sizeAnimation.value,
           height: sizeAnimation.value,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
             color: Colors.red,
             shape: BoxShape.circle,
           ),
           child: Center(
             child: sizeAnimation.value > 50
-                ? Text(
+                ? const Text(
                     '签到成功',
                     style: TextStyle(
                       color: Colors.white,
@@ -127,7 +129,7 @@ class CustomAnimatedWidget extends StatelessWidget {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: TestAnimationPage(),
   ));
 }

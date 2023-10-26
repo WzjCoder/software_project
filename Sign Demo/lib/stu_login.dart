@@ -7,6 +7,8 @@ class Stu_login extends StatelessWidget
   final TextEditingController idCtrl = TextEditingController();
   final TextEditingController pwdCtrl = TextEditingController();
 
+  Stu_login({super.key});
+
   void _login(BuildContext context) //Unfinish
   {
     
@@ -14,7 +16,7 @@ class Stu_login extends StatelessWidget
 
   void _register(BuildContext context)
   {
-    Navigator.of(context).push(CupertinoPageRoute(builder:(context) => stu_resister()));
+    Navigator.of(context).push(CupertinoPageRoute(builder:(context) => const stu_resister()));
   }
 
   @override
