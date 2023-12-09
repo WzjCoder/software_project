@@ -16,6 +16,6 @@
 
 ## 接口文档以及测试
 
-浏览器打开http://localhost:8080/api/doc.htm
+浏览器打开http://localhost:8080/api/doc.html
 里边可以查看接口以及进行接口测试(先启动项目)
 
