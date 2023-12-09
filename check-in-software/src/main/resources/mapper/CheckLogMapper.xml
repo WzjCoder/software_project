@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztu.checkinsoftware.mapper.CheckLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.sztu.checkinsoftware.model.domain.CheckLog">
+            <id property="checkid" column="checkid" jdbcType="BIGINT"/>
+            <result property="userid" column="userid" jdbcType="BIGINT"/>
+            <result property="checkdate" column="checkdate" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        checkid,userid,checkdate
+    </sql>
+</mapper>

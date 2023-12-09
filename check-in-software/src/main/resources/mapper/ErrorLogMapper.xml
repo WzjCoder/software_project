@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.sztu.checkinsoftware.mapper.ErrorLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.sztu.checkinsoftware.model.domain.ErrorLog">
+            <id property="logid" column="logid" jdbcType="BIGINT"/>
+            <result property="userid" column="userid" jdbcType="BIGINT"/>
+            <result property="errortype" column="errortype" jdbcType="VARCHAR"/>
+            <result property="errordate" column="errordate" jdbcType="VARCHAR"/>
+            <result property="isop" column="isop" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        logid,userid,errortype,
+        errordate,isop
+    </sql>
+</mapper>
