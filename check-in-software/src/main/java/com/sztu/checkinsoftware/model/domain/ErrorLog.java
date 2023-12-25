@@ -4,8 +4,10 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import java.io.Serializable;
 import lombok.Data;
+
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 异常记录表
@@ -33,12 +35,17 @@ public class ErrorLog implements Serializable {
     /**
      * 异常发生时间
      */
-    private String errordate;
+    private Date errordate;
 
     /**
      * 是否补签
      */
     private Integer isop;
+
+    /**
+     * 签到id，记录哪次签到
+     */
+    private Long checkid;
 
     @TableField(exist = false)
     private static final long serialVersionUID = 1L;

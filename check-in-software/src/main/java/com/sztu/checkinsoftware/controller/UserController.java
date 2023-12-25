@@ -6,14 +6,12 @@ import com.sztu.checkinsoftware.common.BaseResponse;
 import com.sztu.checkinsoftware.common.ErrorCode;
 import com.sztu.checkinsoftware.common.ResultUtils;
 import com.sztu.checkinsoftware.exception.BusinessException;
+import com.sztu.checkinsoftware.model.domain.CheckLog;
 import com.sztu.checkinsoftware.model.domain.User;
-import com.sztu.checkinsoftware.model.domain.request.UserLoginRequest;
-import com.sztu.checkinsoftware.model.domain.request.UserRegisterRequest;
+import com.sztu.checkinsoftware.model.domain.request.*;
 import com.sztu.checkinsoftware.service.UserService;
-
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.web.bind.annotation.*;
-
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +25,7 @@ import static com.sztu.checkinsoftware.constant.constant.USER_LOGIN_STATE;
  * 用户接口
  */
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/User")
 public class UserController {
 
@@ -122,8 +121,48 @@ public class UserController {
     private boolean isAdmin(HttpServletRequest request){
         //鉴权
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if(userObj == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
         User user = (User) userObj;
         return user != null && user.getUserRole() == ADMIN_ROLE;
     }
 
+    /**
+     * 发布签到
+     */
+    @PostMapping("/postcheckin")
+    public BaseResponse<CheckLog> postCheckin(HttpServletRequest request, @RequestBody UserPostCheckinRequest userPostCheckin){
+        //鉴权
+        if(userPostCheckin == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        CheckLog checkLog = userService.postCheckin(request, userPostCheckin.getClasses(), userPostCheckin.getLength());
+        return ResultUtils.success(checkLog);
+    }
+
+    @PostMapping("/startcheckin")
+    public BaseResponse<List<String>> startCheckin(HttpServletRequest request, UserStartCheckinRequest userStartCheckinRequest){
+        if( userStartCheckinRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        List<String> uncheckin = userService.startCheckin(request,userStartCheckinRequest);
+        return ResultUtils.success(uncheckin);
+    }
+
+    /**
+     * 用户请求签到
+     * @param request
+     * @param userCheckinRequest
+     * @return
+     */
+    @PostMapping("/usercheckin")
+    public BaseResponse<Integer> userCheckin(HttpServletRequest request, @RequestBody UserCheckinRequest userCheckinRequest){
+        //鉴权
+        if(userCheckinRequest == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        Integer result = userService.userCheckin(request, userCheckinRequest.getCheckid(), userCheckinRequest.getCheckcode());
+        return ResultUtils.success(result);
+    }
 }

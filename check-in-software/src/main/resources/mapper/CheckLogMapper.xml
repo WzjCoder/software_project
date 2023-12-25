@@ -8,9 +8,13 @@
             <id property="checkid" column="checkid" jdbcType="BIGINT"/>
             <result property="userid" column="userid" jdbcType="BIGINT"/>
             <result property="checkdate" column="checkdate" jdbcType="TIMESTAMP"/>
+            <result property="code" column="code" jdbcType="VARCHAR"/>
+            <result property="classes" column="classes" jdbcType="VARCHAR"/>
+            <result property="length" column="length" jdbcType="INTEGER"/>
     </resultMap>
 
     <sql id="Base_Column_List">
-        checkid,userid,checkdate
+        checkid,userid,checkdate,
+        code,classes,length
     </sql>
 </mapper>

@@ -8,12 +8,13 @@
             <id property="logid" column="logid" jdbcType="BIGINT"/>
             <result property="userid" column="userid" jdbcType="BIGINT"/>
             <result property="errortype" column="errortype" jdbcType="VARCHAR"/>
-            <result property="errordate" column="errordate" jdbcType="VARCHAR"/>
+            <result property="errordate" column="errordate" jdbcType="TIMESTAMP"/>
             <result property="isop" column="isop" jdbcType="INTEGER"/>
+            <result property="checkid" column="checkid" jdbcType="BIGINT"/>
     </resultMap>
 
     <sql id="Base_Column_List">
         logid,userid,errortype,
-        errordate,isop
+        errordate,isop,checkid
     </sql>
 </mapper>

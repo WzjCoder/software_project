@@ -1,9 +1,12 @@
 package com.sztu.checkinsoftware.service;
 
-import com.sztu.checkinsoftware.model.domain.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.sztu.checkinsoftware.model.domain.CheckLog;
+import com.sztu.checkinsoftware.model.domain.User;
+import com.sztu.checkinsoftware.model.domain.request.UserStartCheckinRequest;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 
 /**
@@ -45,4 +48,32 @@ public interface UserService extends IService<User> {
      * @return
      */
     int userLogout(HttpServletRequest request);
+
+    /**
+     * 发布签到，创建CheckLog对象，并生成签到码
+     * @param request 签到session
+     * @param classes 签到班级
+     * @param length 签到时长(s)
+     * @return 返回签到对象
+     */
+    CheckLog postCheckin(HttpServletRequest request, String classes, int length);
+
+    /**
+     * 老师开始签到，从此刻的length阶段内完成签到
+     * @param request 发布用户
+     * @param checkLog 发布签到的实体
+     * @return 返回未签到用户姓名列表
+     */
+    List<String> startCheckin(HttpServletRequest request, UserStartCheckinRequest userStartCheckinRequest);
+
+    List<String> record(UserStartCheckinRequest userStartCheckinRequest);
+
+    /**
+     * 学生签到接口，将成功签到的用户存入list<CheckinUser>
+     * @param request
+     * @param checkid
+     * @param checkCode
+     * @return
+     */
+    int userCheckin(HttpServletRequest request, Long checkid, String checkCode);
 }

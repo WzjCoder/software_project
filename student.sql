@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主机： localhost
--- 生成日期： 2023-12-09 15:17:52
+-- 生成日期： 2023-12-25 19:50:53
 -- 服务器版本： 5.7.26
 -- PHP 版本： 7.3.4
 
@@ -31,8 +31,21 @@ SET time_zone = "+00:00";
 CREATE TABLE `check_log` (
   `userid` bigint(20) NOT NULL COMMENT '用户id',
   `checkdate` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '签到日期(包含具体时间)',
-  `checkid` bigint(20) NOT NULL COMMENT '签到记录id'
+  `checkid` bigint(20) NOT NULL COMMENT '签到记录id',
+  `code` varchar(20) COLLATE utf8_unicode_ci NOT NULL COMMENT '签到码',
+  `classes` varchar(128) COLLATE utf8_unicode_ci NOT NULL COMMENT '签到班级',
+  `length` int(11) NOT NULL COMMENT '签到时长(s)'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='签到记录表';
+
+--
+-- 转存表中的数据 `check_log`
+--
+
+INSERT INTO `check_log` (`userid`, `checkdate`, `checkid`, `code`, `classes`, `length`) VALUES
+(10086, '2023-12-24 05:41:38', 1, 'fl1bnqr61r', '\"21计科三班\"', 0),
+(1, '2023-12-24 05:41:08', 0, 'firstcheck', '21计科三班', 0),
+(10086, '2023-12-24 05:42:06', 2, 'x0eumrwj6q', '\"21计科三班\"', 0),
+(10086, '2023-12-24 05:42:42', 1738794536688279559, '4lqodyubc5', '\"21计科三班\"', 0);
 
 -- --------------------------------------------------------
 
@@ -44,8 +57,9 @@ CREATE TABLE `error_log` (
   `logid` bigint(20) NOT NULL COMMENT '记录id',
   `userid` bigint(20) NOT NULL COMMENT '用户id',
   `errortype` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '异常类型',
-  `errordate` varchar(256) COLLATE utf8_unicode_ci DEFAULT NULL COMMENT '异常发生时间',
-  `isop` int(11) DEFAULT NULL COMMENT '是否补签'
+  `errordate` datetime NOT NULL COMMENT '异常发生时间',
+  `isop` int(11) DEFAULT NULL COMMENT '是否补签',
+  `checkid` bigint(20) NOT NULL COMMENT '签到id，记录哪次签到'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='异常记录表';
 
 -- --------------------------------------------------------
@@ -65,7 +79,7 @@ CREATE TABLE `user` (
   `createTime` datetime DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   `updateTime` datetime DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
   `isDelete` tinyint(4) DEFAULT '0' COMMENT '是否删除',
-  `userRole` int(11) NOT NULL DEFAULT '0' COMMENT '权限'
+  `userRole` int(11) NOT NULL DEFAULT '1' COMMENT '角色（管理员0、学生1、老师2）'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci COMMENT='用户';
 
 --
@@ -101,6 +115,12 @@ ALTER TABLE `user`
 --
 -- 在导出的表使用AUTO_INCREMENT
 --
+
+--
+-- 使用表AUTO_INCREMENT `check_log`
+--
+ALTER TABLE `check_log`
+  MODIFY `checkid` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '签到记录id', AUTO_INCREMENT=1738794536688279560;
 
 --
 -- 使用表AUTO_INCREMENT `error_log`
