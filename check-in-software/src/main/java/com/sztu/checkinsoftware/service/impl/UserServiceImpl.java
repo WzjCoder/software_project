@@ -3,6 +3,7 @@ package com.sztu.checkinsoftware.service.impl;
 import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.sztu.checkinsoftware.common.MyCopyOnWriteArrayList;
 import com.sztu.checkinsoftware.common.ErrorCode;
 import com.sztu.checkinsoftware.exception.BusinessException;
 import com.sztu.checkinsoftware.mapper.CheckLogMapper;
@@ -22,7 +23,6 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -47,7 +47,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     private CheckLogMapper checklogMapper;
 
     @Resource
-    private CopyOnWriteArrayList<CheckinUser> checkinUsersList;
+    private MyCopyOnWriteArrayList<CheckinUser> checkinUsersList;
     private static final String SALT = "sztu";
 
 
