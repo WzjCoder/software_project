@@ -1,4 +1,3 @@
-import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_auth/Screens/Signup/signup_function.dart';
@@ -11,8 +10,10 @@ final account = TextEditingController();
 final password = TextEditingController();
 final passwordSure = TextEditingController();
 
+final Methods = SignUpFunciton();
+
 class SignUpForm extends StatelessWidget {
-  SignUpForm({
+  const SignUpForm({
     Key? key,
   }) : super(key: key);
 
@@ -69,7 +70,7 @@ class SignUpForm extends StatelessWidget {
           const SizedBox(height: defaultPadding),
           ElevatedButton(
             onPressed: () {
-              // registerUser();
+              Methods.registerUser(context);
             },
             child: Text("Sign Up".toUpperCase()),
           ),

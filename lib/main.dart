@@ -1,6 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_auth/Screens/Home/HomePage_Stu.dart';
+import 'package:flutter_auth/Screens/Login/components/login_form.dart';
+import 'package:flutter_auth/Screens/Login/login_screen.dart';
 import 'package:flutter_auth/Screens/Welcome/welcome_screen.dart';
 import 'package:flutter_auth/constants.dart';
+
+
+const baseUrl = "http://localhost:8080";
+
+void mySnackbar(String msg,BuildContext context,[int ms = 500, bool isquick = false]) {
+  if(isquick) {
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+  }
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      duration: Duration(milliseconds: ms),
+      behavior: SnackBarBehavior.floating,
+      content: Text(msg),
+      action: SnackBarAction(
+        label: 'Okay',
+        onPressed: () {
+          
+        },
+      ),
+    ),
+  );
+}
 
 void main() => runApp(const MyApp());
 
@@ -39,6 +64,12 @@ class MyApp extends StatelessWidget {
             ),
           )),
       home: const WelcomeScreen(),
+      routes: {
+        '/SignIn':(context) => const LoginScreen(),
+        '/HomeStu':(context) => const HomePage_Stu(),
+        '/HomeTea':(context) => const HomePage_Stu(),   //TOMODIFY
+        '/HomeAdmin':(context) => const HomePage_Stu(), //TOMODIFY
+      },
     );
   }
 }
