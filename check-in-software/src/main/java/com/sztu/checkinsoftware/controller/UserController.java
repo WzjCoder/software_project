@@ -6,8 +6,7 @@ import com.sztu.checkinsoftware.common.BaseResponse;
 import com.sztu.checkinsoftware.common.ErrorCode;
 import com.sztu.checkinsoftware.common.ResultUtils;
 import com.sztu.checkinsoftware.exception.BusinessException;
-import com.sztu.checkinsoftware.model.domain.CheckLog;
-import com.sztu.checkinsoftware.model.domain.User;
+import com.sztu.checkinsoftware.model.domain.*;
 import com.sztu.checkinsoftware.model.domain.request.*;
 import com.sztu.checkinsoftware.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -40,10 +39,11 @@ public class UserController {
         String userAccount = userRegisterRequest.getUserAccount();
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
-        if(StringUtils.isAnyBlank(userAccount,userPassword,checkPassword)){
+        String userclasses = userRegisterRequest.getClasses();
+        if(StringUtils.isAnyBlank(userAccount,userPassword,checkPassword, userclasses)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        long result = userService.userRegister(userAccount, userPassword, checkPassword);
+        long result = userService.userRegister(userAccount, userPassword, checkPassword, userclasses);
         return ResultUtils.success(result);
     }
 
@@ -164,5 +164,20 @@ public class UserController {
         }
         Integer result = userService.userCheckin(request, userCheckinRequest.getCheckid(), userCheckinRequest.getCheckcode());
         return ResultUtils.success(result);
+    }
+    @PostMapping("/searchcheckinlogs")
+    public BaseResponse<List<CheckLog>> searchCheckinLog(HttpServletRequest request, UserSearchCheckinLogRequest userSearchCheckinLogRequest){
+        List<CheckLog> result = userService.searchCheckinLog(request, userSearchCheckinLogRequest.getClasses());
+        return ResultUtils.success(result);
+    }
+
+    @PostMapping("/searcherrorlogs")
+    public BaseResponse<List<ErrorLog>> searchErrorLog(HttpServletRequest request){
+        List<ErrorLog> result = userService.searchErrorLog(request);
+        return ResultUtils.success(result);
+    }
+    @PostMapping("/searchonechecklog")
+    public BaseResponse<List<student>> searchOneCheckLog(HttpServletRequest request, Long checkid) {
+        return ResultUtils.success(userService.searchOneCheckLog(request, checkid));
     }
 }

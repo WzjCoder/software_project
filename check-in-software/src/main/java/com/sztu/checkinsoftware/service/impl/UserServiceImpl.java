@@ -9,10 +9,8 @@ import com.sztu.checkinsoftware.exception.BusinessException;
 import com.sztu.checkinsoftware.mapper.CheckLogMapper;
 import com.sztu.checkinsoftware.mapper.ErrorLogMapper;
 import com.sztu.checkinsoftware.mapper.UserMapper;
-import com.sztu.checkinsoftware.model.domain.CheckLog;
-import com.sztu.checkinsoftware.model.domain.CheckinUser;
-import com.sztu.checkinsoftware.model.domain.ErrorLog;
-import com.sztu.checkinsoftware.model.domain.User;
+import com.sztu.checkinsoftware.model.domain.*;
+import com.sztu.checkinsoftware.model.domain.request.UserSearchCheckinLogRequest;
 import com.sztu.checkinsoftware.model.domain.request.UserStartCheckinRequest;
 import com.sztu.checkinsoftware.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -52,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword, String classes) {
         //校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
@@ -86,6 +84,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         User user = new User();
         user.setUserAccount(userAccount);
         user.setUserPassword(userPassword);
+        user.setClasses(classes);
         boolean saveResult = this.save(user);
         if (!saveResult) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "保存错误");
@@ -290,6 +289,91 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         }
         checkinUsersList.add(checkinUser);
         return 1;
+    }
+
+    @Override
+    public List<CheckLog> searchCheckinLog(HttpServletRequest request, String classes) {
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if(userObj == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = (User) userObj;
+        QueryWrapper<CheckLog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", user.getId()).eq("classes", classes);
+        return checklogMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public List<student> searchOneCheckLog(HttpServletRequest request, Long checkid){
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if(userObj == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = (User) userObj;
+
+        QueryWrapper<CheckLog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("checkid", checkid);
+        CheckLog checkLog = checklogMapper.selectOne(queryWrapper);
+
+        QueryWrapper<User> userQueryWrapper = new QueryWrapper<>();
+        userQueryWrapper.eq("classes", checkLog.getClasses());
+        List<User> totalUser = userMapper.selectList(userQueryWrapper);
+
+        QueryWrapper<ErrorLog> errorQueryWrapper = new QueryWrapper<>();
+        errorQueryWrapper.eq("classes", checkLog.getClasses());
+        List<ErrorLog> errorUser = errorlogMapper.selectList(errorQueryWrapper);
+
+        // 先按id排序
+        totalUser.sort(Comparator.comparingLong(User::getId));
+        errorUser.sort(Comparator.comparingLong(ErrorLog::getUserid));
+
+        int length1 = totalUser.size(), length2 = errorUser.size();
+        int tp1 = 0, tp2 = 0;
+        // 对比两个列表中的学生，一样的即为未签到
+        List<student> result = new ArrayList<>();
+        while (tp1 < length1 && tp2 < length2) {
+            User user1 = totalUser.get(tp1);
+            ErrorLog user2 = errorUser.get(tp2);
+            if(Objects.equals(user1.getId(), user2.getUserid())){
+                tp1 ++;
+                tp2 ++;
+                student one = new student();
+                one.setId(user1.getId());
+                one.setName(user1.getUsername());
+                one.setIscheckin(0L);
+                result.add(one);
+            }
+            else {
+                student one = new student();
+                one.setId(user1.getId());
+                one.setName(user1.getUsername());
+                one.setIscheckin(1L);
+                result.add(one);
+                tp1 ++;
+            }
+        }
+        while (tp1 < length1) {
+            User user1 = totalUser.get(tp1);
+            student one = new student();
+            one.setId(user1.getId());
+            one.setName(user1.getUsername());
+            one.setIscheckin(1L);
+            result.add(one);
+            tp1 ++;
+        }
+        return result;
+    }
+
+    @Override
+    public List<ErrorLog> searchErrorLog(HttpServletRequest request) {
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if(userObj == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = (User) userObj;
+        QueryWrapper<ErrorLog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", user.getId());
+        return errorlogMapper.selectList(queryWrapper);
     }
 }
 

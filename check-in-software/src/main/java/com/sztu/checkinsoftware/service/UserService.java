@@ -2,8 +2,11 @@ package com.sztu.checkinsoftware.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.sztu.checkinsoftware.model.domain.CheckLog;
+import com.sztu.checkinsoftware.model.domain.ErrorLog;
 import com.sztu.checkinsoftware.model.domain.User;
+import com.sztu.checkinsoftware.model.domain.request.UserSearchCheckinLogRequest;
 import com.sztu.checkinsoftware.model.domain.request.UserStartCheckinRequest;
+import com.sztu.checkinsoftware.model.domain.student;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
@@ -24,7 +27,7 @@ public interface UserService extends IService<User> {
      * @param checkPassword 校验码
      * @return 新用户id
      */
-    long userRegister(String userAccount,String userPassword,String checkPassword);
+    long userRegister(String userAccount,String userPassword,String checkPassword, String classes);
 
     /**
      * 用户登录
@@ -61,7 +64,6 @@ public interface UserService extends IService<User> {
     /**
      * 老师开始签到，从此刻的length阶段内完成签到
      * @param request 发布用户
-     * @param checkLog 发布签到的实体
      * @return 返回未签到用户姓名列表
      */
     List<String> startCheckin(HttpServletRequest request, UserStartCheckinRequest userStartCheckinRequest);
@@ -76,4 +78,26 @@ public interface UserService extends IService<User> {
      * @return
      */
     int userCheckin(HttpServletRequest request, Long checkid, String checkCode);
+
+    /**
+     * 发布签到历史记录查询
+     * 老师查看自己在某班级的签到历史记录
+     * @param classes 查询的班级
+     * @return 返回签到记录
+     */
+    List<CheckLog> searchCheckinLog(HttpServletRequest request, String classes);
+
+    /**
+     * 查询某次签到的整体签到情况
+     * @param checkid
+     * @return
+     */
+    List<student> searchOneCheckLog(HttpServletRequest request, Long checkid);
+    /**
+     * 学生端查询未签到的记录
+     * @param request
+     * @return
+     */
+    List<ErrorLog> searchErrorLog(HttpServletRequest request);
+
 }
