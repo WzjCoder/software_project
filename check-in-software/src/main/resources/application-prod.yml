@@ -1,0 +1,16 @@
+spring:
+  # DataSource Config
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.115.227.51:3306/student
+    username: root
+    password: 123456
+  # session失效时间
+  session:
+    timeout: 86400
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+server:
+  address: 0.0.0.0
+
