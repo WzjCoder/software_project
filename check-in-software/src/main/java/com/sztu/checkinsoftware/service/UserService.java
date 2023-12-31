@@ -100,4 +100,12 @@ public interface UserService extends IService<User> {
      */
     List<ErrorLog> searchErrorLog(HttpServletRequest request);
 
+    /**
+     * 老师对未签到同学进行补签
+     * @param checkid 签到id
+     * @param userid  学生id
+     * @return
+     */
+    int reCheckin(HttpServletRequest request, Long checkid, Long userid);
+
 }

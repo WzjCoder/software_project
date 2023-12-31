@@ -180,4 +180,10 @@ public class UserController {
     public BaseResponse<List<student>> searchOneCheckLog(HttpServletRequest request, Long checkid) {
         return ResultUtils.success(userService.searchOneCheckLog(request, checkid));
     }
+
+    @PostMapping("/recheckin")
+    public BaseResponse<Integer> reCheckin(HttpServletRequest request, UserReCheckinRequest userReCheckinRequest) {
+        Integer result = userService.reCheckin(request, userReCheckinRequest.getCheckid(), userReCheckinRequest.getUserid());
+        return ResultUtils.success(result);
+    }
 }

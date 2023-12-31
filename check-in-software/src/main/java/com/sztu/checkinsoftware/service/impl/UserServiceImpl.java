@@ -239,6 +239,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 errorLog.setCheckid(userStartCheckinRequest.getCheckid());
                 errorLog.setUserid(user1.getId());
                 errorLog.setErrortype("缺席");
+                errorlogMapper.insert(errorLog);
                 tp1 ++;
             }
         }
@@ -249,6 +250,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             errorLog.setCheckid(userStartCheckinRequest.getCheckid());
             errorLog.setUserid(user1.getId());
             errorLog.setErrortype("缺席");
+            errorlogMapper.insert(errorLog);
             tp1 ++;
         }
         return uncheckin;
@@ -341,6 +343,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
                 one.setId(user1.getId());
                 one.setName(user1.getUsername());
                 one.setIscheckin(0L);
+                if(user2.getIsop() == 1) {
+                    one.setIscheckin(1L);
+                }
                 result.add(one);
             }
             else {
@@ -374,6 +379,36 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         QueryWrapper<ErrorLog> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("userid", user.getId());
         return errorlogMapper.selectList(queryWrapper);
+    }
+
+    @Override
+    public int reCheckin(HttpServletRequest request, Long checkid, Long userid) {
+        Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
+        if(userObj == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = (User) userObj;
+        // 判断是否为学生
+        if (user.getUserRole() == STUDENT_ROLE) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "权限不足");
+        }
+        // 检查是否为本次签到的发布者或者管理员
+        QueryWrapper<CheckLog> checkLogQueryWrapper = new QueryWrapper<>();
+        checkLogQueryWrapper.eq("userid", user.getId());
+        CheckLog checkLog = checklogMapper.selectOne(checkLogQueryWrapper);
+        if (!Objects.equals(checkLog.getUserid(), user.getId()) && user.getUserRole() != ADMIN_ROLE) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "非本次签到的发布者");
+        }
+        // 找出签到记录，修改isop属性
+        QueryWrapper<ErrorLog> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("userid", userid).eq("checkid", checkid);
+        ErrorLog errorLog = errorlogMapper.selectOne(queryWrapper);
+        if (errorLog == null)  {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "签到数据不存在");
+        }
+        errorLog.setIsop(1);
+        errorlogMapper.updateById(errorLog);
+        return 1;
     }
 }
 
