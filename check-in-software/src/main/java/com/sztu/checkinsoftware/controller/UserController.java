@@ -75,7 +75,7 @@ public class UserController {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         User currentUser = (User) userObj;
         if(currentUser == null){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
         long userId = currentUser.getId();
         User user = userService.getById(userId);
@@ -87,7 +87,7 @@ public class UserController {
     public BaseResponse<List<User>> searchUsers(String username, HttpServletRequest request){
         //鉴权
         if(!isAdmin(request)){
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         if(StringUtils.isNotBlank(username)){
@@ -107,7 +107,7 @@ public class UserController {
             throw new BusinessException(ErrorCode.NO_AUTH);
         }
         if(id <= 0) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
         Boolean result = userService.removeById(id);
         return ResultUtils.success(result);
@@ -135,7 +135,7 @@ public class UserController {
     public BaseResponse<CheckLog> postCheckin(HttpServletRequest request, @RequestBody UserPostCheckinRequest userPostCheckin){
         //鉴权
         if(userPostCheckin == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "请求不存在");
         }
         CheckLog checkLog = userService.postCheckin(request, userPostCheckin.getClasses(), userPostCheckin.getLength());
         return ResultUtils.success(checkLog);

@@ -171,7 +171,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     public CheckLog postCheckin(HttpServletRequest request, String classes, int length) {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         if (userObj == null) {
-            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+            throw new BusinessException(ErrorCode.PARAMS_ERROR, "用户不存在");
         }
         User user = (User) userObj;
         if (user.getUserRole() == STUDENT_ROLE) {
