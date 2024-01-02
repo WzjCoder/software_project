@@ -215,7 +215,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
     @Override
     public List<String> record(UserStartCheckinRequest userStartCheckinRequest) {
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
-        queryWrapper.eq("classes", userStartCheckinRequest.getClasses());
+        queryWrapper.eq("classes", userStartCheckinRequest.getClasses()).eq("userRole", 1);
         List<User> students = userMapper.selectList(queryWrapper);
         List<CheckinUser> successfulStudents = new ArrayList<>(checkinUsersList.stream()
                 .filter(element -> Objects.equals(element.getCheckid(), userStartCheckinRequest.getCheckid()))
