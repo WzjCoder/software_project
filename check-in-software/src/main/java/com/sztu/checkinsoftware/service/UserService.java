@@ -4,12 +4,11 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.sztu.checkinsoftware.model.domain.CheckLog;
 import com.sztu.checkinsoftware.model.domain.ErrorLog;
 import com.sztu.checkinsoftware.model.domain.User;
-import com.sztu.checkinsoftware.model.domain.request.UserSearchCheckinLogRequest;
 import com.sztu.checkinsoftware.model.domain.request.UserStartCheckinRequest;
 import com.sztu.checkinsoftware.model.domain.student;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
+
 
 
 /**
@@ -107,5 +106,13 @@ public interface UserService extends IService<User> {
      * @return
      */
     int reCheckin(HttpServletRequest request, Long checkid, Long userid);
+
+    /**
+     *
+     * @param content
+     * @param fileSaveFullPath
+     * @param hints 参数配置
+     * @throws Exception
+     */
 
 }

@@ -57,8 +57,8 @@ public class UserController {
         if(StringUtils.isAnyBlank(userAccount,userPassword)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        User result =  userService.userLogin(userAccount, userPassword, request);
-        return ResultUtils.success(result);
+        User user =  userService.userLogin(userAccount, userPassword, request);
+        return ResultUtils.success(user);
     }
 
     @PostMapping("/logout")

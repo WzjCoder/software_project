@@ -9,7 +9,7 @@ import java.io.Serializable;
 public class UserReCheckinRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = 5012419803148707969L;
-    private Long userid;
+    private long userid;
 
-    private Long checkid;
+    private long checkid;
 }

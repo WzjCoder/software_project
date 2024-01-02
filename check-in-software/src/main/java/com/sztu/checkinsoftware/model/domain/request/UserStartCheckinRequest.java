@@ -14,7 +14,7 @@ public class UserStartCheckinRequest implements Serializable {
     @Serial
     private static final long serialVersionUID = 5012419803148707969L;
 
-    private Long checkid;
+    private long checkid;
 
     /**
      * 签到班级
@@ -24,6 +24,6 @@ public class UserStartCheckinRequest implements Serializable {
     /**
      * 签到时长(s)
      */
-    private Integer length;
+    private int length;
 
 }

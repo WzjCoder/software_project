@@ -10,7 +10,6 @@ import com.sztu.checkinsoftware.mapper.CheckLogMapper;
 import com.sztu.checkinsoftware.mapper.ErrorLogMapper;
 import com.sztu.checkinsoftware.mapper.UserMapper;
 import com.sztu.checkinsoftware.model.domain.*;
-import com.sztu.checkinsoftware.model.domain.request.UserSearchCheckinLogRequest;
 import com.sztu.checkinsoftware.model.domain.request.UserStartCheckinRequest;
 import com.sztu.checkinsoftware.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -21,6 +20,7 @@ import org.springframework.util.DigestUtils;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -410,6 +410,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         errorlogMapper.updateById(errorLog);
         return 1;
     }
+
 }
 
 
