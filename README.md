@@ -19,3 +19,13 @@
 浏览器打开http://localhost:8080/api/doc.html
 里边可以查看接口以及进行接口测试(先启动项目)
 
+## 项目部署
+
+1. 选择有公网ip的服务器
+2. 使用docker部署
+3. 先构建项目运行镜像(maven3.9.5 + openjdk17)
+4. 编写项目Dockerfile文件放在项目根目录
+5. 使用"docker build -t image_name:v1.0 ."命令构建项目镜像
+6. "docker run -p 8080:8080 -d image_name:v1.0" 后台运行镜像并进行端口转发
+7. 请求地址：https://公网ip:8080/api/User/..
+
