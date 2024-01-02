@@ -15,11 +15,11 @@ create table error_log
 (
     logid     bigint auto_increment comment '记录id'
         primary key,
-    userid    bigint       not null comment '用户id',
-    errortype varchar(256) null comment '异常类型',
-    errordate datetime     not null comment '异常发生时间',
-    isop      int          null comment '是否补签',
-    checkid   bigint       not null comment '签到id，记录哪次签到'
+    userid    bigint                                 not null comment '用户id',
+    errortype varchar(256) default '缺席'            null comment '异常类型',
+    errordate datetime     default CURRENT_TIMESTAMP null comment '异常发生时间',
+    isop      int          default 0                 null comment '是否补签',
+    checkid   bigint                                 not null comment '签到id，记录哪次签到'
 )
     comment '异常记录表';
 

@@ -50,7 +50,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
 
 
     @Override
-    public long userRegister(String userAccount, String userPassword, String checkPassword, String classes) {
+    public long userRegister(String userAccount, String userPassword, String checkPassword, String userName, String classes) {
         //校验
         if (StringUtils.isAnyBlank(userAccount, userPassword, checkPassword)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "参数为空");
@@ -85,6 +85,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         user.setUserAccount(userAccount);
         user.setUserPassword(userPassword);
         user.setClasses(classes);
+        user.setUsername(userName);
         boolean saveResult = this.save(user);
         if (!saveResult) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "保存错误");
@@ -286,7 +287,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         CheckinUser checkinUser = new CheckinUser();
         checkinUser.setId(user.getId());
         checkinUser.setCheckid(checkLog.getCheckid());
-        if (!checkinUsersList.contains(checkinUser)) {
+        if (checkinUsersList.contains(checkinUser)) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "重复签到");
         }
         checkinUsersList.add(checkinUser);
@@ -396,7 +397,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         QueryWrapper<CheckLog> checkLogQueryWrapper = new QueryWrapper<>();
         checkLogQueryWrapper.eq("userid", user.getId());
         CheckLog checkLog = checklogMapper.selectOne(checkLogQueryWrapper);
-        if (!Objects.equals(checkLog.getUserid(), user.getId()) && user.getUserRole() != ADMIN_ROLE) {
+        if (!Objects.equals(checkLog.getUserid(), user.getId()) || user.getUserRole() == STUDENT_ROLE) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "非本次签到的发布者");
         }
         // 找出签到记录，修改isop属性

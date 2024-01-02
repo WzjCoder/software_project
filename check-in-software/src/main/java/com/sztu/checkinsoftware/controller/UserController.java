@@ -40,10 +40,11 @@ public class UserController {
         String userPassword = userRegisterRequest.getUserPassword();
         String checkPassword = userRegisterRequest.getCheckPassword();
         String userclasses = userRegisterRequest.getClasses();
-        if(StringUtils.isAnyBlank(userAccount,userPassword,checkPassword, userclasses)){
+        String userName = userRegisterRequest.getUserName();
+        if(StringUtils.isAnyBlank(userAccount,userPassword,checkPassword, userclasses, userName)){
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        long result = userService.userRegister(userAccount, userPassword, checkPassword, userclasses);
+        long result = userService.userRegister(userAccount, userPassword, checkPassword, userName, userclasses);
         return ResultUtils.success(result);
     }
 
