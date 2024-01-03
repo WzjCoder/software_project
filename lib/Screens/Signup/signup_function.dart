@@ -1,12 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_auth/Screens/Login/components/login_form.dart';
 import 'package:flutter_auth/Screens/Signup/components/signup_form.dart';
 import 'package:flutter_auth/main.dart';
 
 class SignUpFunciton {
   final dio = Dio();
-  Future<void> registerUser(BuildContext context) async {
+  Future<void> registerUser(BuildContext context,String cls) async {
     var response = await dio.post(
       "$baseUrl/api/User/register",
       options: Options(
@@ -15,8 +14,10 @@ class SignUpFunciton {
       ),
       data: {
         "checkPassword": passwordSure.text,
+        'classes':cls,
         "userAccount": account.text,
         "userPassword": password.text,
+        'userName':name.text,
       },
     );
 

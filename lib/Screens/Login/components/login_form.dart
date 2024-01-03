@@ -1,4 +1,5 @@
 // ignore_for_file: non_constant_identifier_names
+import 'package:flutter_auth/StoreToken.dart';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -18,7 +19,11 @@ class LoginForm extends StatelessWidget {
   final pwd = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    return Form(
+    return SafeArea(
+      child:Padding(
+        padding: EdgeInsets.all(defaultPadding),
+        child:SingleChildScrollView(
+        reverse: true,
       child: Column(
         children: [
           TextFormField(
@@ -75,7 +80,7 @@ class LoginForm extends StatelessWidget {
           ),
         ],
       ),
-    );
+    )));
   }
 }
 
@@ -93,6 +98,54 @@ class SignInFunction {
         "userPassword": pwd,
       },
     );
+    String rawHeaders= response.headers.toString();
+    // print('ok');
+    // print(rawHeaders);
+
+    List<String> headerLines = rawHeaders.split('\n');
+    for (var line in headerLines) {
+      if (line.startsWith('set-cookie:')) {
+        List<String> parts = line.split(':');
+        String cookieHeader = parts[1].trim();
+        List<String> cookies = cookieHeader.split(';');
+        String session = cookies[0]; // 'JSESSIONID=32D6818312B6BAB17F4C9BC5F0D2A46B'
+        // print(session);
+        saveToken(session);
+      }
+    }
+
+    String session = await getToken();
+    currentname = account;
+    
+    var current = await dio.get(
+      "$baseUrl/api/User/current",
+      options: Options(
+        headers: {
+          'Cookie': session,
+        }
+      )
+    );
+
+    // var allInfo = await dio.get(
+    //   "$baseUrl/api/User/search",
+    //   options: Options(
+    //     headers: {
+    //       'Cookie': session,
+    //     }
+    //   )
+    // );
+
+    // print(allInfo);
+    // Map<String,dynamic> allIn = allInfo.data['data'];
+
+    // for (var user in allIn['data']) {
+    //   var classes = user['classes'];
+    //   if (classes != null) {
+    //     classesInfo.add(classes);
+    //   }
+    // }
+
+    currentInfo = current.data['data'];
 
     Map<String,dynamic> ret = response.data;
     await Future.delayed(const Duration(milliseconds: 100));
@@ -101,10 +154,8 @@ class SignInFunction {
     if(ret['message'] == 'ok') {
       if(ret['data']['userRole'] == 1) {
         Navigator.of(context).pushNamed('/HomeStu');  //学生身份
-      } else if(ret['data']['userRole'] == 2) {
+      } else{
         Navigator.of(context).pushNamed('/HomeTea');  //教师身份
-      } else {
-        Navigator.of(context).pushNamed('/HomeAdmin');  //管理员身份
       }
     }
   }
