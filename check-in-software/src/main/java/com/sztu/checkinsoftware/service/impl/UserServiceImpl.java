@@ -185,7 +185,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         String checkInCode = RandomUtil.randomString(10);
         CheckLog checklog = new CheckLog();
         // LocalDateTime timestamp = LocalDateTime.now();
-        checklog.setUserid(10086L);
+        checklog.setUserid(user.getId());
         checklog.setCode(checkInCode);
         checklog.setClasses(classes);
         checklog.setLength(length);
@@ -329,7 +329,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         List<User> totalUser = userMapper.selectList(userQueryWrapper);
 
         QueryWrapper<ErrorLog> errorQueryWrapper = new QueryWrapper<>();
-        errorQueryWrapper.eq("classes", checkLog.getClasses());
+        errorQueryWrapper.eq("checkid", checkid);
         List<ErrorLog> errorUser = errorlogMapper.selectList(errorQueryWrapper);
 
         // 先按id排序
