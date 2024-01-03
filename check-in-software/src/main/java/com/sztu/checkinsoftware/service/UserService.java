@@ -8,7 +8,7 @@ import com.sztu.checkinsoftware.model.domain.request.UserStartCheckinRequest;
 import com.sztu.checkinsoftware.model.domain.student;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-
+import java.util.concurrent.Future;
 
 
 /**
@@ -65,16 +65,16 @@ public interface UserService extends IService<User> {
      * @param request 发布用户
      * @return 返回未签到用户姓名列表
      */
-    List<String> startCheckin(HttpServletRequest request, UserStartCheckinRequest userStartCheckinRequest);
+    Future<List<String>> startCheckin(HttpServletRequest request, UserStartCheckinRequest userStartCheckinRequest);
 
     List<String> record(UserStartCheckinRequest userStartCheckinRequest);
 
     /**
      * 学生签到接口，将成功签到的用户存入list<CheckinUser>
-     * @param request
-     * @param checkid
-     * @param checkCode
-     * @return
+     * @param request 用户请求
+     * @param checkid 签到id
+     * @param checkCode 签到码
+     * @return 返回结果
      */
     int userCheckin(HttpServletRequest request, Long checkid, String checkCode);
 
@@ -88,14 +88,14 @@ public interface UserService extends IService<User> {
 
     /**
      * 查询某次签到的整体签到情况
-     * @param checkid
-     * @return
+     * @param checkid 签到id
+     * @return 返回签到情况
      */
     List<student> searchOneCheckLog(HttpServletRequest request, Long checkid);
     /**
      * 学生端查询未签到的记录
-     * @param request
-     * @return
+     * @param request 用户请求
+     * @return 返回未签到记录
      */
     List<ErrorLog> searchErrorLog(HttpServletRequest request);
 

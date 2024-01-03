@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 
 import static com.sztu.checkinsoftware.constant.constant.ADMIN_ROLE;
@@ -147,7 +149,13 @@ public class UserController {
         if( userStartCheckinRequest == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
-        List<String> uncheckin = userService.startCheckin(request,userStartCheckinRequest);
+        Future<List<String>> result = userService.startCheckin(request,userStartCheckinRequest);
+        List<String> uncheckin;
+        try {
+            uncheckin = result.get();
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
         return ResultUtils.success(uncheckin);
     }
 

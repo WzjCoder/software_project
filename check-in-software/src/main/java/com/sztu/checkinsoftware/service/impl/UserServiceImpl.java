@@ -14,6 +14,8 @@ import com.sztu.checkinsoftware.model.domain.request.UserStartCheckinRequest;
 import com.sztu.checkinsoftware.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 import java.util.List;
+import java.util.concurrent.Future;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -190,8 +193,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
         return checklog;
     }
 
+    @Async("threadPoolTaskExecutor")
     @Override
-    public List<String> startCheckin(HttpServletRequest request, UserStartCheckinRequest userStartCheckinRequest) {
+    public Future<List<String>> startCheckin(HttpServletRequest request, UserStartCheckinRequest userStartCheckinRequest) {
         Object userObj = request.getSession().getAttribute(USER_LOGIN_STATE);
         if(userObj == null) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
@@ -209,7 +213,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>
             throw new BusinessException(ErrorCode.PARAMS_ERROR);
         }
         // 未签到用户录入
-        return record(userStartCheckinRequest);
+        List<String> result = record(userStartCheckinRequest);
+        Future<List<String>> results = new AsyncResult<>(result);
+        return results;
     }
 
     @Override
